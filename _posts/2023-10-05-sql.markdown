@@ -1,0 +1,190 @@
+---
+layout: single
+title: 'SQL 기초'
+author_profile: true
+date: 2023-10-04 18:28:53 +0900
+categories: sql
+published: true
+toc: true
+toc_label: 'Table of Contents'
+toc_icon: 'list-ul'
+toc_sticky: true
+sidebar:
+  nav: 'docs'
+# sidebar:
+#   - title: 'Title'
+#     image: http://placehold.it/350x250
+#     image_alt: 'image'
+#     text: 'Some text here.'
+#   - title: 'Another Title'
+#     text: 'More text here.'
+---
+
+<br/>
+
+SQL: **S**tructured **Q**uery **L**anguage
+
+## 0. DB와 SQL을 사용하는 이유
+
+- 많은 양의 data를 효과적으로 저장/수정/사용하기 위해 DB를 사용한다.
+
+- SQL은 query문을 통해 data를 읽어오는 과정을 쉽게 만들어주고, data를 정리/분석하는 기능을 제공한다.
+
+<br/>
+<br/>
+
+## 1. SELECT, WHERE
+
+DB에서 data를 읽어오기
+
+### SELECT ... FROM ... ;
+
+```sql
+-- DB에 있는 table 보기
+SHOW tables;
+
+-- table에서 특정 field 가져오기
+SELECT column_name FROM table_name;
+
+-- data에 조건 주기
+SELECT * FROM table_name
+WHERE conditions;
+```
+
+<br/>
+
+### **WHERE** - query에 조건 추가
+
+```sql
+-- AND, OR
+SELECT * FROM users
+WHERE name LIKE '김%' AND age > 20;
+
+-- =, !=
+SELECT * FROM users
+WHERE title != 'target title';
+
+-- BETWEEN ... AND ...
+SELECT * FROM messages
+WHERE created_at BETWEEN "2023-10-05" AND "2023-10-07"; -- 5일부터 6일까지의 data
+
+-- IN 포함
+SELECT * FROM courses
+WHERE week IN (1, 4, 5); -- week이 1, 4, 5인 data
+
+-- LIKE 패턴
+SELECT * FROM users
+WHERE email LIKE '%@gmail.com'; -- @gmail.com으로 끝나는 data
+```
+
+<br/>
+
+### **LIMIT** - 일부 data만 가져오기
+
+```sql
+SELECT * FROM users
+LIMIT 10; -- 10개만
+```
+
+<br/>
+
+### **DISTINCT** - 중복 제거
+
+```sql
+SELECT DISTINCT column_names FROM users;
+
+-- users table에서 나라이름 중복제거 후 가져오기
+SELECT DISTINCT country FROM users;
+
+-- 나라이름 + 도시이름 중복제거 후 가져오기
+SELECT DISTINCT country, city FROM users;
+
+```
+
+<br/>
+
+### **COUNT** - data 개수
+
+```sql
+-- user data의 수
+SELECT COUNT(*) FROM users;
+
+-- 한국 국적인 user data의 수
+SELECT COUNT(*) FROM users
+WHERE country = 'korea';
+
+-- country의 수
+SELECT COUNT(DISTINCT country) FROM users;
+```
+
+<br/>
+<br/>
+
+## 2. GROUP BY, ORDER BY
+
+특정 범주로 data를 묶거나, 정렬해서 더 의미있는 data를 추출할 수 있다.
+
+### **GROUP BY**
+
+```sql
+-- COUNT(*)에는 column_name(filed)으로 묶인 data의 개수가 들어간다.
+SELECT column_name, COUNT(*) FROM table_name
+GROUP BY column_name;
+
+SELECT name, COUNT(*) FROM users
+GROUP BY name;
+```
+
+<br/>
+
+### **GROUP BY**로 field의 통계값 얻기
+
+- MIN(), MAX()
+- AVG(), SUM()
+- ROUND(), FLOOR(), CEIL(), ...
+
+```sql
+SELECT week, MIN(likes), MAX(likes), AVG(likes), ROUND(AVG(likes), 2), FLOOR(AVG(likes)), SUM(likes) FROM checkins
+GROUP BY week;
+```
+
+<br/>
+
+### **ORDER BY**
+
+```sql
+SELECT column_name1, COUNT(*) FROM table_name
+GROUP BY column_name1
+ORDER BY column_name2 DESC/ASC; -- default ASC
+
+SELECT name, COUNT(*) FROM users
+GROUP BY name
+ORDER BY COUNT(*) DESC;
+```
+
+<br/>
+<br/>
+
+## 3. AS (Alias)
+
+Table이나 Column의 이름에 alias 붙일 떄 사용한다.
+`table_name.column_name` 으로 특정 table을 명시할 때, 간단하게 alias를 사용해서 `table_alias.column_name`으로 나타낼 수 있다.
+
+```sql
+SELECT city, COUNT(*) AS cnt FROM users AS u
+WHERE u.country = 'korea'
+GROUP BY city;
+```
+
+----- 결과 -----
+
+| city | cnt |
+| :-----: | :---: |
+| Seoul | 80 |
+| Busan | 40 |
+| ... | ... |
+
+<!--
+## Join, Subquery
+
+## etc... -->

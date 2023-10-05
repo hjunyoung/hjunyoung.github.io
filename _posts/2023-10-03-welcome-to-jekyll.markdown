@@ -4,8 +4,8 @@ title: 'Welcome to Jekyll!'
 author_profile: true
 date: 2023-10-03 02:32:53 +0900
 categories: jekyll update
-# published: true
 published: false
+# published: true
 toc: true
 toc_label: 'My Table of Contents'
 toc_icon: 'list-ul'
