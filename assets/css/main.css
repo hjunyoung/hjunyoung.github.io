@@ -1,3 +1,33 @@
+body,
+.sidebar {
+  /* Firefox */
+  scrollbar-width: 6px;
+  scrollbar-color: #00adb5 #cceff0;
+}
+.sidebar {
+  /* Firefox */
+  scrollbar-width: 4px;
+  scrollbar-color: #00adb5 #cceff0;
+}
+
+body::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+  /* Safari and Chrome */
+  background-color: #cceff0;
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar {
+  /* Safari and Chrome */
+  background-color: #cceff0;
+  width: 4px;
+}
+
+body::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+  /* Safari and Chrome */
+  background-color: #00adb5;
+}
+
 .author__urls.social-icons i,
 .author__urls.social-icons .svg-inline--fa,
 .page__footer-follow .social-icons i,
