@@ -21,6 +21,24 @@ body {
   }
 }
 
+body {
+  /* Firefox */
+  scrollbar-width: 6px;
+  scrollbar-color: $primary-color $scrollbar-track;
+}
+
+body::-webkit-scrollbar {
+  /* Safari and Chrome */
+  background-color: $scrollbar-track;
+  width: 6px;
+  height: 6px;
+}
+
+body::-webkit-scrollbar-thumb {
+  /* Safari and Chrome */
+  background-color: $primary-color;
+}
+
 h1,
 h2,
 h3,
@@ -117,7 +135,7 @@ blockquote {
     font-style: italic;
 
     &:before {
-      content: "\2014";
+      content: '\2014';
       padding-right: 5px;
     }
   }
@@ -330,7 +348,7 @@ a,
 tr,
 td,
 form button,
-input[type="submit"],
+input[type='submit'],
 .btn,
 .highlight,
 .archive__item-teaser {

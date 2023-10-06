@@ -71,6 +71,25 @@
   }
 }
 
+.sidebar,
+.toc__menu {
+  /* Firefox */
+  scrollbar-width: 4px;
+  scrollbar-color: $primary-color $scrollbar-track;
+}
+.sidebar::-webkit-scrollbar,
+.toc__menu::-webkit-scrollbar {
+  /* Safari and Chrome */
+  background-color: $scrollbar-track;
+  width: 4px;
+  height: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb,
+.toc__menu::-webkit-scrollbar-thumb {
+  /* Safari and Chrome */
+  background-color: $primary-color;
+}
+
 .sidebar__right {
   margin-bottom: 1em;
 
@@ -267,7 +286,7 @@
 
   &:before {
     display: block;
-    content: "";
+    content: '';
     position: absolute;
     top: -11px;
     left: calc(50% - 10px);
@@ -284,7 +303,7 @@
 
   &:after {
     display: block;
-    content: "";
+    content: '';
     position: absolute;
     top: -10px;
     left: calc(50% - 10px);
@@ -350,4 +369,3 @@
     margin-right: initial;
   }
 }
-

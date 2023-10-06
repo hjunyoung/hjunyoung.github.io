@@ -18,6 +18,22 @@ figure.highlight {
     margin: 0;
     padding: 1em;
   }
+
+  pre.highlight {
+    /* Firefox */
+    scrollbar-width: 4px;
+    scrollbar-color: $primary-color $scrollbar-track;
+  }
+  pre.highlight::-webkit-scrollbar {
+    /* Safari and Chrome */
+    background-color: $scrollbar-track;
+    width: 4px;
+    height: 4px;
+  }
+  pre.highlight::-webkit-scrollbar-thumb {
+    /* Safari and Chrome */
+    background-color: $primary-color;
+  }
 }
 
 .highlight table {
@@ -318,7 +334,8 @@ figure.highlight {
 }
 
 .gist {
-  th, td {
+  th,
+  td {
     border-bottom: 0;
   }
 }
