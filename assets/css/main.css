@@ -3162,7 +3162,7 @@ body {
 .page__content p,
 .page__content li,
 .page__content dl {
-  font-size: 1em;
+  font-size: 0.9em;
 }
 .page__content p {
   margin: 0 0 1.3em;
