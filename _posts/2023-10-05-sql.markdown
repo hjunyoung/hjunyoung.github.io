@@ -103,7 +103,7 @@ SELECT DISTINCT country, city FROM users;
 
 <br/>
 
-### **COUNT** - data 개수
+### **COUNT** - data 개수, NULL은 세지 않음
 
 ```sql
 -- user data의 수
@@ -133,6 +133,10 @@ GROUP BY column_name;
 
 SELECT name, COUNT(*) FROM users
 GROUP BY name;
+
+-- GROUP BY에 여러 개의  field를 사용할 수도 있다.
+SELECT name, country, COUNT(*) FROM users
+GROUP BY name, country;
 ```
 
 <br/>
@@ -140,7 +144,7 @@ GROUP BY name;
 ### **GROUP BY**로 field의 통계값 얻기
 
 - MIN(), MAX()
-- AVG(), SUM()
+- AVG(), SUM(), DIV()
 - ROUND(), FLOOR(), CEIL(), ...
 
 ```sql
@@ -160,6 +164,11 @@ ORDER BY column_name2 DESC/ASC; -- default ASC
 SELECT name, COUNT(*) FROM users
 GROUP BY name
 ORDER BY COUNT(*) DESC;
+
+-- ORDER BY에 여러 개의  field를 사용할 수도 있다.
+SELECT name, country, COUNT(*) FROM users
+GROUP BY name, country
+ORDER BY name DESC, country ASC
 ```
 
 <br/>
@@ -174,17 +183,136 @@ Table이나 Column의 이름에 alias 붙일 떄 사용한다.
 SELECT city, COUNT(*) AS cnt FROM users AS u
 WHERE u.country = 'korea'
 GROUP BY city;
+
+-- AS 없이도 가능
+SELECT city, COUNT(*) cnt FROM users u
+WHERE u.country = 'korea'
+GROUP BY city;
 ```
 
 ----- 결과 -----
 
-| city | cnt |
-| :-----: | :---: |
-| Seoul | 80 |
-| Busan | 40 |
-| ... | ... |
+| city  | cnt |
+| :---: | :-: |
+| Seoul | 80  |
+| Busan | 40  |
+|  ...  | ... |
+
+alias로 설정한 cnt로 column field name이 출력된 것을 확인 가능하다.
+
+<br/>
+<br/>
+
+## 4. JOIN
+
+DB에 data를 저장할 떄 table 하나에 모든 data를 저장하는 것이 아니라, data의 특징별로 table을 나눠서 data를 저장한다.
+필요한 경우 여러 table을 공통된 key를 기준으로 연결할 수 있다.
+
+### **LEFT JOIN**
+
+두 table의 합집합
+
+```sql
+SELECT * FROM table_a AS a
+LEFT JOIN table_b AS b
+ON a.key = b.key
+```
+
+<center>
+<img src="https://github.com/hjunyoung/hjunyoung.github.io/assets/50318500/c242a1c5-872e-47ff-93e0-54518dcde0ea" alt="JOIN query" width=400/>
+</center>
+
+`FROM` 다음에 나오는 table을 `table_a`, JOIN query에 나오는 table을 `table_b`라고 하면
+
+왼쪽 table(예시에서 table_a)에 있는 data들에 오른쪽 table(예시에서 table_b)의 data를 합친다.(즉, table_a의 data는 모두 포함)
+
+동일한 key값을 갖는 data가 table_b에 없는 경우 `Null` 값이 저장된다.
+
+Table에서 특정 field의 값이 `Null`인(없는) data를 읽어올 수 있다.
+
+```sql
+-- 학교를 다니지 않는 유저 data
+SELECT * FROM users AS u
+LEFT JOIN school_users AS s
+ON u.user_id = s.user_id
+WHERE s.school IS NULL -- IS NOT NULL: 학교를 다니는 유저 data
+```
+
+<br/>
+
+### **RIGHT JOIN**
+
+두 table의 합집합
+
+```sql
+SELECT * FROM table_a AS a
+RIGHT JOIN table_b AS b
+ON a.key = b.key
+```
+
+LEFT JOIN과 반대로 오른쪽 table(table_b)에 있는 data들에 왼쪽 table(table_a)의 data를 합친다.(즉, table_b의 data는 모두 포함)
+
+동일한 key값을 갖는 data가 table_a에 없는 경우 `Null` 값이 출력된다.
+
+<br/>
+
+### **INNER JOIN**
+
+두 table의 교집합
+
+```sql
+SELECT * FROM table_a AS a
+INNER JOIN table_b AS b
+ON a.key = b.key
+```
+
+두 table에서 공통된 key 값이 존재하는 data들만 모아준다.
+
+<br/>
+
+### **UNION**
+
+여러 개의 SELECT query를 한번에 모아서 출력하는 경우 사용
+
+> 주의) 이 때, 두 SELECT 결과의 field name(column name)이 같아야 한다.
+
+```sql
+(
+  SELECT 'dummy_value1' AS dummy_column_name, field_a, field_b, field_c from table
+  ...;
+)
+UNION ALL
+(
+  SELECT 'dummy_value2' AS dummy_column_name, field_a, field_c, field_c from table
+  ...;
+)
+```
+
+| dummy_column_name | field_a | field_b | field_c |
+| :---------------: | :-----: | :-----: | :-----: |
+|  'dummy_value1'   |   ...   |   ...   |   ...   |
+|                   |   ...   |
+|  'dummy_value1'   |   ...   |   ...   |   ...   |
+|  'dummy_value2'   |   ...   |   ...   |   ...   |
+|                   |   ...   |
+|  'dummy_value2'   |   ...   |   ...   |   ...   |
+|                   |   ...   |
+
+<br/>
+`UNION ALL`을 사용하면 `ORDER BY`로 한 정렬이 무시된다.
+SubQuery를 이용해서 정렬 문제 해결 가능하다.
+
+<br/>
+<br/>
+
+**참고) DUMMY column**
+
+```sql
+SELECT 'dummy_value' AS column_name FROM table;
+
+SELECT 'July' AS month, user_id ,name FROM messages;
+```
 
 <!--
-## Join, Subquery
 
-## etc... -->
+## Subquery, etc... -->
