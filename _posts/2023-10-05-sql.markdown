@@ -20,8 +20,6 @@ sidebar:
 #     text: 'More text here.'
 ---
 
-<br/>
-
 SQL: **S**tructured **Q**uery **L**anguage
 
 ## 0. DB와 SQL을 사용하는 이유
@@ -65,8 +63,9 @@ SELECT * FROM users
 WHERE title != 'target title';
 
 -- BETWEEN ... AND ...
+-- 5일부터 6일까지의 data
 SELECT * FROM messages
-WHERE created_at BETWEEN "2023-10-05" AND "2023-10-07"; -- 5일부터 6일까지의 data
+WHERE created_at BETWEEN "2023-10-05" AND "2023-10-07";
 
 -- IN 포함
 SELECT * FROM courses
@@ -148,7 +147,14 @@ GROUP BY name, country;
 - ROUND(), FLOOR(), CEIL(), ...
 
 ```sql
-SELECT week, MIN(likes), MAX(likes), AVG(likes), ROUND(AVG(likes), 2), FLOOR(AVG(likes)), SUM(likes) FROM checkins
+SELECT week,
+       MIN(likes),
+       MAX(likes),
+       AVG(likes),
+       ROUND(AVG(likes), 2),
+       FLOOR(AVG(likes)),
+       SUM(likes)
+FROM checkins
 GROUP BY week;
 ```
 
@@ -303,7 +309,6 @@ UNION ALL
 SubQuery를 이용해서 정렬 문제 해결 가능하다.
 
 <br/>
-<br/>
 
 **참고) DUMMY column**
 
@@ -313,6 +318,227 @@ SELECT 'dummy_value' AS column_name FROM table;
 SELECT 'July' AS month, user_id ,name FROM messages;
 ```
 
-<!--
+<br/>
+<br/>
 
-## Subquery, etc... -->
+## 5. Subquery, WITH...AS
+
+### **Subquery**
+
+Query문 안에 다른 query가 들어가는 경우
+Subqeury를 사용하지 않아도 data를 얻을 수 있지만, subquery를 사용하면 더 간단하게 data를 얻을 수 있다.
+
+WHERE, SELECT, FROM 과 자주 쓰인다.
+
+자주 쓰는 유형
+
+#### 1. WHERE
+
+Subquery의 결과를 WHERE에서 사용
+
+```sql
+WHERE field_name IN (Subquery)
+
+-- 한국 국적인 users만 출력
+SELECT * FROM users u
+WHERE u.user_id IN (
+  SELECT c.user_id FROM countries c
+  WHERE c.country = 'korea'
+)
+
+-- subquery 안 쓰는 경우
+SELECT * FROM users u
+INNER JOIN countries c
+ON u.user_id = c.user_id
+WHERE c.country = 'korea'
+```
+
+#### 2. SELECT
+
+기존 table에 추가 통계 data를 붙일 때 사용
+
+```sql
+SELECT field_name, (Subquery) FROM table;
+
+-- checkins table에 평균 likes 횟수 data 추가해서 출력
+SELECT c.user_id,
+	     c.likes,
+	     (
+	   	  SELECT AVG(likes) FROM checkins
+        WHERE user_id = c.user_id
+	     ) AS avg_like
+  FROM checkins AS c
+```
+
+-------------- 결과 --------------
+
+| user_id | likes | avg_like |
+| :-----: | :---: | :------: |
+| user_id |  10   |   3.5    |
+|         |  ...  |
+| user_id |   9   |   4.6    |
+
+<br/>
+
+#### 3. FROM - 가장 많이 사용됨
+
+SELECT query의 결과와 이미 있는 table을 JOIN할 때 사용
+또는 SELECT query의 결과로 나온 table들을 JOIN할 때 사용
+
+```sql
+SELECT * FROM users AS u
+INNER JOIN (Subquery) AS a
+ON u.field_name = a.field_name
+
+-- user의 point와 평균 like 수 data 출력
+SELECT a.user_id, a.avg_like, b.point FROM (
+	SELECT user_id,
+         AVG(likes) AS avg_like
+  FROM checkins c
+	GROUP BY user_id
+) AS a
+INNER JOIN (
+	SELECT user_id, point
+  FROM point_users pu
+) AS b
+ON a.user_id = b.user_id
+```
+
+--------------- 결과 ---------------
+
+| user_id | avg_like | point  |
+| :-----: | :------: | :----: |
+| user_id |   2.7    | 14,034 |
+|         |   ...    |
+| user_id |   4.5    | 8,409  |
+
+위 예시에서 `()` 안의 subquery의 결과를 하나의 table처럼 생각하고 query 했다.
+
+<br/>
+
+### **WITH...AS**
+
+subquery를 사용하다보면 아래처럼 조금 복잡해보이는 query가 만들어질 때가 있다.
+
+```sql
+SELECT c.title,
+       a.cnt_checkins,
+       b.cnt_total,
+       (a.cnt_checkins/b.cnt_total) AS ratio
+FROM (
+  SELECT course_id,
+         COUNT(DISTINCT user_id) AS cnt_checkins
+  FROM checkins
+  GROUP BY course_id
+) AS a
+INNER JOIN (
+  SELECT course_id,
+         COUNT(order_no) AS cnt_total
+  FROM orders
+  GROUP BY course_id
+) AS b
+ON a.course_id = b.course_id
+INNER JOIN courses c
+ON c.course_id = a.course_id
+```
+
+<br/>
+
+복잡해 보일 수도 있지만 subquery를 한 table로 보면 `INNER JOIN` 두 번, `SELECT` 한 번만 수행하는 query다.
+
+```sql
+SELECT c.title,
+       a.cnt_checkins,
+       b.cnt_total,
+       (a.cnt_checkins/b.cnt_total) AS ratio
+FROM (subquery) AS a
+INNER JOIN (subquery) AS b
+ON a.course_id = b.course_id
+INNER JOIN courses c
+ON c.course_id = a.course_id
+```
+
+<br/>
+
+이런 query를 읽기 쉽게 만들 때 쓸 수 있는 문법이 `WITH`다.
+
+Table과 Field_name에서 AS로 Alias를 설정해주었던 걸처럼 `(subquery)`에 `WITH alias AS (subquery)`로 이름을 정해준다.
+
+```sql
+WITH table1 AS (
+  SELECT course_id, COUNT(DISTINCT user_id) AS cnt_checkins FROM checkins
+  GROUP BY course_id
+), table2 AS (
+  SELECT course_id, COUNT(order_no) AS cnt_total FROM orders
+  GROUP BY course_id
+)
+
+SELECT c.title,
+       a.cnt_checkins,
+       b.cnt_total,
+       (a.cnt_checkins/b.cnt_total) AS ratio
+FROM table1 AS a
+INNER JOIN table2 AS b
+ON a.course_id = b.course_id
+INNER JOIN courses c
+ON c.course_id = a.course_id
+```
+
+<br/>
+<br/>
+
+## 6. SUBSTRING_INDEX, SUBSTRING
+
+**SUBSTRING_INDEX**
+
+```sql
+-- SUBSTRING_INDEX - string split
+SELECT email,
+       SUBSTRING_INDEX(email, '@', 1) AS id,
+       SUBSTRING_INDEX(email, '@', -1) AS domain
+FROM users
+```
+
+|     email     | id  |  domain   |
+| :-----------: | :-: | :-------: |
+| abc@gmail.com | abc | gmail.com |
+
+<br/>
+
+**SUBSTRING**
+
+```sql
+-- SUBSTRING - string splice
+SELECT SUBSTRING(created_at, start_index, char_number)
+FROM tables
+
+SELECT user_id,
+       created_at,
+       SUBSTRING(created_at, 1, 10) AS date
+FROM users
+```
+
+| user_id |     created_at      |    date    |
+| :-----: | :-----------------: | :--------: |
+| user_id | 2023-10-05 20:00:00 | 2023-10-05 |
+
+<br/>
+<br/>
+
+## 6. CASE WHEN ... THEN ... ELSE ... END
+
+경우에 따라 다른 값을 출력
+
+```sql
+SELECT user_id, age,
+    (CASE WHEN age > 19 THEN 'adult'
+          WHEN age > 2 THEN 'child'
+          ELSE 'infant' END) AS stage
+FROM users
+```
+
+| user_id | age | stage |
+| :-----: | :-: | :----: |
+| user_id | 17  | child  |
+| user_id | 26  | adult  |
+| user_id | 0  | infant  |
