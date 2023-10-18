@@ -1,0 +1,184 @@
+---
+layout: single
+title: 'OOP 숫자야구게임'
+author_profile: true
+date: 2023-10-18 00:00:00 +0900
+categories: ['Java', 'OOP']
+published: true
+toc: true
+toc_label: 'Table of Contents'
+toc_icon: 'list-ul'
+toc_sticky: true
+sidebar:
+  nav: 'docs'
+# sidebar:
+#   - title: 'Title'
+#     image: http://placehold.it/350x250
+#     image_alt: 'image'
+#     text: 'Some text here.'
+#   - title: 'Another Title'
+#     text: 'More text here.'
+---
+
+숫자야구게임을 만드는 과제를 하면서 OOP를 써보았다. 
+
+OOP로 코드 짜는게 익숙하지 않아서, BaseballNumber class의 main method에서 구현 후에 여러 클래스로 나누는 식으로 refactoring했다. 
+
+<br>
+<br>
+
+
+# 사용한 로직
+
+1. 컴퓨터가 랜덤한 정답을 만든다.
+2. 사용자에게 입력값을 받아 ArrayList로 만든다.
+3. 두 수를 비교하여 결과를 출력하고, 정답이 아니라면 다시 입력을 받는다.
+4. 정답인 경우 몇 번만에 맞췄는지 print하고 게임을 종료한다.
+
+<br>
+<br>
+
+# OOP로 만들어보기
+
+위의 로직 중에서 컴퓨터가 랜덤 정답을 만드는 부분과, 사용자 입력값을 ArrayList로 만드는 부분은 다른 게임이라는 객체에서도 사용가능한 부분이라고 생각해 class로 뽑아내기로 했다.
+
+두 수를 비교하고 게임 결과를 출력하는 부분은 숫자야구게임에서만 쓰일 수 있을 것 같아서 BaseballNumber class의 method로 남겨두었다. 
+
+<br>
+<br>
+
+## 1. 컴퓨터가 랜덤 정답 만드는 `GenerateRandomAnswer` class
+
+class의 확장성을 높이기 위해, interface를 구현하는 방식을 사용해보았다.
+
+랜덤 정답을 만드는 class를 사용할 때 `GenerateRandomAnswer`가 아닌 다른 class를 사용한다고 가정했을 때, 사용하려는 class가 따라갈 규격을 정의하기 위해 `AnswerGenerate` interface를 정의해 주었다.
+
+만약 숫자야구게임에서 `GenerateRandomAnswer class`가 아닌 다른 randomAnswer를 만드는 class를 사용하려면 `AnswerGenerate`를 구현해야한다.
+
+내부적으로 randomAnswer를 만드는 로직이 어떻게 구현되어있는지 상관없이, `AnswerGenerate` interface를 구현하기만 하면, 숫자야구게임에서 사용이 가능하다. 
+
+
+```java
+// Answer.java
+public interface AnswerGenerator {
+    public ArrayList<Integer> generateAnswer(int lenght);
+}
+
+// GenerateRandomAnswer.java
+public class GenerateRandomAnswer implements AnswerGenerator{
+    @Override
+    public ArrayList<Integer> generateAnswer(int length) {
+        ArrayList<Integer> answers = new ArrayList<Integer>();
+        while (answers.size() < length) {
+            int value = (int) (Math.random() * 10);
+            if (answers.contains(value)) {  // 이미 값이 있는 경우 중복처리
+                continue;
+            }
+            answers.add(value); // 값이 없는 경우 추가
+        }
+        return answers;
+    }
+}
+```
+
+<br>
+<br>
+
+## 2. 사용자 입력값을 ArrayList로 만들어주는 `UserInputArray` class
+
+여기서도 마찬가지로 `UserInputArray` class가 구현해야할 interface를 만들었다.
+
+```java
+public interface GetUserArray {
+    ArrayList<Integer> getUserInputArray(String input);
+}
+
+
+public class UserInputArray implements GetUserArray {
+    @Override
+    public ArrayList<Integer> getUserInputArray(String input) {
+
+        ArrayList<Integer> userInputs = new ArrayList<>();
+        for (char c: input.toCharArray()) {
+            userInputs.add(c -'0');
+        }
+        return userInputs;
+    }
+}
+
+```
+
+<br>
+<br>
+
+
+## 3. 메인이 되는 class인 `BaseballNumber` class
+
+`BaseballNumber` class에서 `GenerateRandomAnswer`와 `UserInputArray` class를 주입받는다.
+
+`BaseballNumber`도 여러 게임이 따라야 할 interface인 `Game` interface를 구현하도록 했다.
+
+이 때, 생성자에서 `GetUserArray`와 `AnswerGenerator` interface 타입으로 인자를 받아오는 것을 통해, 객체간 coupling이 적어지고 확장성을 높일 수 있다.
+
+```java
+public interface Game {
+    void start();
+}
+
+public class BaseballNumber implements Game{
+
+    ...
+
+    private final GetUserArray userInputArray;
+    private final AnswerGenerator answerGenerator;
+
+    public BaseballNumber(int length, GetUserArray userInputArray, AnswerGenerator answerGenerator ) {
+        this.length = length;
+        this.userInputArray = userInputArray;
+        this.answerGenerator = answerGenerator;
+    }
+
+
+    @Override
+    public  void start() {
+        answers = answerGenerator.generateAnswer(length);
+        runGame(length);
+    }
+
+    private void runGame(int lenght) { ... }
+
+    private boolean checkAnswer(ArrayList<Integer> userInput, int tryNums) { 
+      ...
+    }
+}
+```
+
+
+<br>
+<br>
+
+## 4. `Main` class에서 BaseballNumber의 instance 만들어 사용
+
+인스턴스를 만들고 사용할 때, `Game` interface 규격사향에 있는 method만 사용할 수 있도록 `Game` 타입으로 인스턴스를 만들었다.
+```java
+public class Main {
+    public static void main(String[] args) {
+        Game baseBallNumberGame =  new BaseballNumber(4, new UserInputArray(), new GenerateRandomAnswer());
+        baseBallNumberGame.start();
+    }
+}
+```
+
+
+<br>
+<br>
+
+# 느낀점 + 배운점
+
+class로 빼는 경우에는 그 class가 하나의 기능을 하는 경우에 뺀다.
+
+객체 간의 coupling을 줄이기 위해서 의존성을 주입할 때, interface 타입을 사용하는 이유에 대해서 이해할 수 있게 되었다.
+
+interface는 클래스를 사용할 때 따라야 하는 규약
+
+확장성을 항상 고려하면서 class간의 관계를 설계해야겠다.
