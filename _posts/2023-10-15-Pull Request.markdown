@@ -84,6 +84,10 @@ git push origin branch-name
 
 - PR의 title은 간결하게 적고, comment에서 자세하게 PR에 대해 설명하기
 
+- 수정 사항에 대한 요약과, 어떤 문제를 해결했는지 등을 자세하게 설명한다.
+
+- Issue와 관련된 PR이라면 [해당 issue를 link](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)해준다. 
+
 <br/>
 
 ## 6. Conflict이 없는 경우 해당 project 관리자가 승인 후 merge 가능하다.
@@ -173,6 +177,17 @@ git push origin branch-name -f
 
 
 ## 9. Merge가 되면 내 repository에서 branch를 삭제한다.
+
+<br>
+<br>
+
+# Takeaway
+
+- PR 할 때 conflict 발생하면 어떻게 해결해야하는지 막막했는데, local에서 conflict 났을 때랑 똑같은 방법으로 해결해주면 된다. 
+
+- PR을 만들 당시에는 conflict가 없어도, 추후에 main branch에 다른 commit이 된 경우 conflict이 발생할 수 있다. rebase 사용에 익숙해지자.
+
+
 
 <br>
 <br>
