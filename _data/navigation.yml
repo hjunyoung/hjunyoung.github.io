@@ -4,55 +4,80 @@ main:
   #   url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   # - title: 'Sample Posts'
   #   url: /year-archive/
-  - title: 'Sample Collections'
-    url: /collection-archive/
-    # description: 'tooltip description'
-  - title: 'About'
-    url: https://mmistakes.github.io/minimal-mistakes/about/
-  - title: 'Sitemap'
-    url: /sitemap/
+  # - title: 'Sample Collections'
+  #   url: /collection-archive/
+  # description: 'tooltip description'
+  # - title: 'About'
+  #   url: https://mmistakes.github.io/minimal-mistakes/about/
+  - title: 'GitHub'
+    url: https://github.com/hjunyoung
+  # - title: 'Sitemap'
+  #   url: /sitemap/
 
 docs:
-  - title: Getting Started
+  - title: Web
     children:
-      - title: "Quick-Start Guide"
-        url: /docs/quick-start-guide/
-      - title: "Structure"
-        url: /docs/structure/
-      - title: "Installation"
-        url: /docs/installation/
-      - title: "Upgrading"
-        url: /docs/upgrading/
+      - title: 'Database'
+        url: /web/database/
+      # - title: 'Http'
+      #   url: /web/http/
+      - title: '웹 보안'
+        url: /web/security/
+      # - title: "Layouts"
+      # url: /docs/layouts/
 
-  - title: Customization
+  - title: 언어
     children:
-      - title: "Configuration"
-        url: /docs/configuration/
-      - title: "Navigation"
-        url: /docs/navigation/
-      - title: "UI Text"
-        url: /docs/ui-text/
-      - title: "Authors"
-        url: /docs/authors/
-      - title: "Layouts"
-        url: /docs/layouts/
+      - title: 'JavaScript'
+        url: /language/javascript/
+      - title: 'TypeScript'
+        url: /language/typescript/
+      - title: 'Java'
+        url: /language/java/
 
-  - title: Content
+  - title: Backend
     children:
-      - title: "Working with Posts"
-        url: /docs/posts/
-      - title: "Working with Pages"
-        url: /docs/pages/
-      - title: "Working with Collections"
-        url: /docs/collections/
-      - title: "Helpers"
-        url: /docs/helpers/
-      - title: "Utility Classes"
-        url: /docs/utility-classes/
+      - title: 'Node.js'
+        url: /backend/node/
+      - title: 'Spring'
+        url: /backend/spring/
+      - title: 'Express.js'
+        url: /backend/express/
+      - title: 'Nest.js'
+        url: /backend/nest/
 
-  - title: Extras
+  - title: Frontend
     children:
-      - title: "Stylesheets"
-        url: /docs/stylesheets/
-      - title: "JavaScript"
-        url: /docs/javascript/
+      - title: 'React.js'
+        url: /frontend/react/
+
+  - title: Cloud
+    children:
+      - title: 'AWS'
+        url: /cloud/aws/
+      - title: 'Docker'
+        url: /cloud/docker/
+      # - title: '보안'
+      #   url: /web/security/
+      # - title: "Layouts"
+      # url: /docs/layouts/
+
+  # - title: Content
+  #   children:
+  #     - title: 'Working with Posts'
+  #       url: /docs/posts/
+  #     - title: 'Working with Pages'
+  #       url: /docs/pages/
+  #     - title: 'Working with Collections'
+  #       url: /docs/collections/
+  #     - title: 'Helpers'
+  #       url: /docs/helpers/
+  #     - title: 'Utility Classes'
+  #       url: /docs/utility-classes/
+
+  # - title: Extras
+  #   children:
+  #     - title: 'Stylesheets'
+  #       url: /docs/stylesheets/
+  #     - title: 'JavaScript'
+  #       url: /docs/javascript/
