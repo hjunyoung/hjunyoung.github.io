@@ -2,9 +2,9 @@
 layout: single
 title: 'GitHub flow'
 author_profile: true
-date: 2023-10-18 00:00:00 +0900
+date: 2023-10-16 00:00:00 +0900
 categories: git
-published: false
+published: true
 toc: true
 toc_label: 'Table of Contents'
 toc_icon: 'list-ul'
