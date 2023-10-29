@@ -1,0 +1,54 @@
+---
+layout: single
+title: '[WIL2]'
+author_profile: true
+date: 2023-10-29 00:00:00 +0900
+categories: 항해
+published: true
+toc: true
+toc_label: 'Table of Contents'
+toc_icon: 'list-ul'
+toc_sticky: true
+sidebar:
+  nav: 'docs'
+# sidebar:
+#   - title: 'Title'
+#     image: http://placehold.it/350x250
+#     image_alt: 'image'
+#     text: 'Some text here.'
+#   - title: 'Another Title'
+#     text: 'More text here.'
+---
+
+WIL 23-28 October 2023
+
+# 이번 주 회고
+
+**Java algorithm**
+
+  Java로 알고리즘 문제를 풀면서 여러 가지 메소드와 문법을 사용해 보았다. 확실히 언어는 사용할 때 익숙해지고 실력도 많이 향상되는 것을 다시 한번 느꼈다. 주특기 주차 들어가서 Spring 공부를 해야하긴 하지만, 매일 한 문제라도 algorithm 문제를 풀어야겠다.
+
+<br>
+
+**SOLID 설계 원칙**
+
+  SOLID 설계 원칙에 대해서 조금 공부했는데, 실제로 코드를 작성하면서 공부한 것이 아니라 아직 막 와닫지는 않는다. 실제로 프로젝트를 하고 과제하면서 설계 원칙에 대해 더 고민하는 시간을 갖자.
+
+**Spring**
+
+  Spring 강의를 수강하고 처음으로 Spring framework를 사용해봤다. Sevlet, 영속성 컨텍스트 등에 압도된 한 주였지만, 일단 넘어가고 나중에 다시 와서 보자.
+
+<br>
+<br>
+
+# 다음 주에 공부할 것
+
+Spring
+
+JPA
+
+인증과 인가
+
+(시간이 된다면 JVM이 어떻게 동작하는지 공부해보자)
+
+
