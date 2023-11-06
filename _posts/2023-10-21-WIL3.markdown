@@ -1,0 +1,45 @@
+---
+layout: single
+title: '[WIL3]'
+author_profile: true
+date: 2023-11-05 00:00:00 +0900
+categories: 항해
+published: true
+toc: true
+toc_label: 'Table of Contents'
+toc_icon: 'list-ul'
+toc_sticky: true
+sidebar:
+  nav: 'docs'
+# sidebar:
+#   - title: 'Title'
+#     image: http://placehold.it/350x250
+#     image_alt: 'image'
+#     text: 'Some text here.'
+#   - title: 'Another Title'
+#     text: 'More text here.'
+---
+
+WIL 30 October - 4 November 2023
+
+# 이번 주 회고
+
+**Spring**
+
+  Spring 과제를 하는 중이다. 3 layer architecture로 관심사를 분리하는 것처럼, Spring Security를 사용할 때도 인증/인가 로직과 비지니스 로직을 분리할 수 있다. 쉬운 유지보수를 위해 관심사를 나누고, 하나의 메서드나 클래스, layer에서 하나의 작업만 수행하게 코드를 작성하도록 더 노력해야겠다. 
+
+  다른 팀원이 도매인을 기준으로 패키지 구조를 만든 것을 보고 따라해봤는데, 계층 별로 나눴을 때보다 관련된 코드들이 하나의 패키지에 응집되어 있어서 해당 도메인 관련 작업을 할 떄 더 효율적이라는 느낌이 들었다. API 설계할 떄 관련 도메인 별로 API를 나눠서 설계하고 있는데, 패키지를 도메인 별로 나누면 API 구조와 도메인 구조가 일치해서 더 직관적이라 관리가 편하다는 장점도 있는 것 같다.
+
+  아직 DDD에 대해서 제대로 공부하거나 찾아본 적은 없어서 공부하면서 장단점이 뭔지 알아봐야겠다.
+
+
+<br>
+<br>
+
+# 다음 주에 공부할 것
+
+Spring
+
+과제 정리
+
+DDD에 대해 알아보자
