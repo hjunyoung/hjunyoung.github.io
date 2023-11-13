@@ -1,0 +1,45 @@
+---
+layout: single
+title: '[WIL4]'
+author_profile: true
+date: 2023-11-12 00:00:00 +0900
+categories: 항해
+published: true
+toc: true
+toc_label: 'Table of Contents'
+toc_icon: 'list-ul'
+toc_sticky: true
+sidebar:
+  nav: 'docs'
+# sidebar:
+#   - title: 'Title'
+#     image: http://placehold.it/350x250
+#     image_alt: 'image'
+#     text: 'Some text here.'
+#   - title: 'Another Title'
+#     text: 'More text here.'
+---
+
+WIL 6-11 November 2023
+
+# 이번 주 회고
+
+**Spring**
+
+  Spring 5주차 과제까지 마무리 했다. 4주차 과제를 할 떄는 그냥 구현하는 것에만 초점을 두고 했는데, 5주차 과제에서는 조금 다른 방식으로 접근해봤다.
+
+  객체의 책임에 대한 문제에 대해 고민해보면서 정적 팩토리 메서드를 사용해보았다. 모든 비즈시스 로직을 서비스에서 구현하는 것이 아니라 도메인의 책임은 entity에서 메소드로 구현하니 객체 간의 책임 분리가 더 확실하게 되는 것을 느낄 수 있었다.
+
+  어디까지가 domain의 책임이고 아닌지를 판단하는 것이 조금 어렵고 애매한 부분이 많아서 결정하기가 어려웠다. 또 정적 팩토리 메서드를 만들 때 메서드가 하는 일을 이름만 보고도 알 수 있게 작명하는 것이 생각했던 것보다 쉬운 것이 아니라는 것을 많이 느꼈다. 
+
+  또 하나 새롭게 해본 것은 API response의 형식을 통일하려고 ApiReponse class를 만들어서 사용해봤다[(github repository)](https://github.com/hjunyoung/api-response-format). 성공했을 때와 실패했을 때를 나눠서 항상 동일한 형식의 data를 response로 전달할 수 있다는 장점은 있는 것 같지만, 내가 만든 class를 사용하니 코드의 양이 많이 늘어나서 수정이 많이 필요할 것 같다. 또 다른 사람이 이 코드를 수정하는 경우 한 눈에 보고 어떻게 사용하는지 알아보기도 어려울 것 같다는 점에서 더 간단한 방식으로 접근하는 것도 좋을 것 같다. 
+
+
+<br>
+<br>
+
+# 다음 주에 공부할 것
+
+CI/CD 한 번 해보기
+Test code 작성하는 방법
+QueryDSL(시간 있으면)

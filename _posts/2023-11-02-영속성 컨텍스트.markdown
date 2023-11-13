@@ -1,0 +1,169 @@
+---
+layout: single
+title: 'JPA와 영속성 컨텍스트'
+author_profile: true
+date: 2023-11-02 00:00:00 +0900
+categories: ['Spring']
+published: true
+toc: true
+toc_label: 'Table of Contents'
+toc_icon: 'list-ul'
+toc_sticky: true
+sidebar:
+  nav: 'docs'
+# sidebar:
+#   - title: 'Title'
+#     image: http://placehold.it/350x250
+#     image_alt: 'image'
+#     text: 'Some text here.'
+#   - title: 'Another Title'
+#     text: 'More text here.'
+---
+
+<br>
+
+Spring을 공부하면서 메모장 만들기 과제를 할 때, Jdbc를 써서 꾸역꾸역 만들어봤는데 진짜 너무 복잡했다. Update, Delete는 그나마 괜찮았는데, Create랑 Read에서 코드 양도 많아지고 복잡해져서 코드 작성하는데 어려움이 있었다.
+
+과제 마무리하고 계속 공부하던 중에 JPA를 배우고 메모장 과제를 JPA를 사용해서 refactoring했는데, repository 코드가 Repository 선언부 제외하고는 그냥 다 사라졌다...
+
+이전에 Express를 써보면서 Sequalize나 Mongoose 같은 ORM과 ODM을 사용한 적은 있지만, 그 당시에는 MySQL과 MongoDB을 직접 사용하여 코드를 작성하지 않고 바로 ORM/ODM을 사용했어서, ORM/ODM이 주는 편리함을 제대로 체감하지 못했다. 근데 이번에 jdbc로 작성한 코드를 JPA로 바꾸는 경험을 하니 ORM/ODM이 주는 편의성을 제대로 느낄 수 있었다.
+
+# JPA란?
+
+Jdbc를 쓰거나 아니면 그냥 DBMS를 써서 애플리케이션과 DB를 연결한다면 직접 SQL query를 작성해야하고, DB로 접속해서 호출하는 것을 다 처리해야한다. 또 SQL의 결과를 직접 객체로 바꿔주는 작업도 필요하다. Jdbc를 사용하지 않는다면, DB에 connect하고 query를 요청하고 결과를 받고 connection을 종료하는 것까지 직접 해줘야 한다. Jdbc로 코드 작성하는 것도 복잡한데, 저런 작업들까지하면 정말 필요한 구현을 할 시간은 부족해질 수밖에 없다. 또 유지보수 측면에서 본다면, 프로젝트에 변경사항이 생길 때마다, sql query부분과 query 결과를 객체로 변환해주는 코드를 모두 수정해야 한다. 듣기만해도 유지하기 어렵다.
+
+이러한 문제를 해결하기 위해 등장한 것이 ORM(Object Relational Mapping)이다. 이름에서 유추할 수 있듯이 객체와 DB table 내의 data를 mapping해서 변환해준다.
+
+# 영속성 컨텍스트 (Persistence Context)
+
+<br>
+
+# Windows에서 WSL2 MySQL에 접속하기
+
+## 1. WSL2에 MySQL이 없다면 설치하기
+
+**1-1. packages를 최신 상태로 업데이트**
+
+```zsh
+# packages update & upgrade
+sudo apt-get update
+sudo apt-get upgrade
+```
+
+<br>
+ 
+**1-2. mysql-server 설치**
+
+```shell
+sudo apt-get install mysql-server
+mysql --version
+```
+
+<br>
+<br>
+
+## 2. MySQL 설정하기
+
+**2-1. mysql 시작 후 mysql server로 접속**
+
+```zsh
+sudo systemctl start mysql
+sudo mysql
+```
+
+<br>
+ 
+**2-2. root user password 설정**
+
+mysql을 설치할 때 설정한 경우 설정하지 않아도 된다.
+
+```sql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'newpassword';
+
+FLUSH PRIVILEGES;
+exit;
+```
+
+<br>
+
+**2-3. MySQL security를 높이기 위한 설정**
+
+```sql
+sudo mysql_secure_installation -p
+```
+
+위의 command 입력하고 MySQL 설치할 때 또는 2-2에서 설정한 password 입력
+
+여러 setting을 할 수 있는 prompt가 뜨는데 아래와 같이 설정(필요에 따라 변경 가능)
+
+```zsh
+Change the password for root ? : n
+Remove anonymous users? : y
+Disallow root login remotely? : n
+Remove test database and access to it? : n
+Reload privilege tables now? : y
+```
+
+<br>
+ 
+**2-4. Credential이 잘 동작하는지 확인**
+
+```zsh
+sudo mysql
+# ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
+# 이런 ERROR가 나야 Credential이 잘 동작하는 것
+
+sudo mysql -u root -p
+# 위 command 입력 후 password 입력했을 때 server로 들어가면 잘 동작하는 것
+```
+
+<br>
+<br>
+
+## 3. MySQL의 default PORT 변경
+
+Windows에 MySQL server가 없는 경우에는 WSL2에 있는 MySQL의 PORT를 변경하지 않아도 된다.
+
+Host machine(Window)에도 MySQL server가 있는 경우에, 동시에 두 개의 MySQL server를 열기 위해서 WSL2 MySQL의 PORT를 바꿔주는 거다.
+
+**3-1. my.cnf 파일을 열기**
+
+```shell
+sudo nano /etc/mysql/my.cnf
+```
+
+**3-2. 마지막 줄에서 PORT 변경**
+
+```shell
+[mysqld]
+port = 33061 # 변경하고 싶은 PORT 입력
+```
+
+서버 재시작
+
+```zsh
+sudo systemctl restart mysql
+
+```
+
+<br>
+<br>
+
+## 4. 연결확인 하기
+
+**4-1. Windows Workbench에서 연결**
+
+![image](https://github.com/hjunyoung/hjunyoung.github.io/assets/50318500/9a3fd713-c952-4d59-8936-0e875fca59fd)
+
+<br>
+
+**4-2. Windows IntelliJ에서 연결**
+
+![image](https://github.com/hjunyoung/hjunyoung.github.io/assets/50318500/4938f75a-da27-4e63-a7a7-3e53da59e0e2)
+
+<br>
+<br>
+
+# Reference
+
+[Connect WSL's MySQL from Windows Host Machine](https://www.youtube.com/watch?v=DBsyCk2vZw4)

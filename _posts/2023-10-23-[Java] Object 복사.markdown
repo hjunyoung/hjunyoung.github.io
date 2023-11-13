@@ -66,7 +66,7 @@ const newObj = { ...old }; // 깊은 복사는 아니지만
 
 # java에서 Object를 어떻게 복사할까?
 
-## 0. Object 얕은 복사
+## 0. Object 얕은 복사 (Shallow copy)
 
 **`clone()` 메서드**
 
@@ -129,7 +129,7 @@ Book 객체의 field 값이 다 primitive 타입이므로 얕은 복사 clone()�
 <br>
 <br>
 
-## 1. 공변 반환타입(Covariant return type)
+## 1. 공변 반환타입 (Covariant return type)
 
 공변 반환타입은 overring할 때 조상 메서드의 return type을 자손 클래스의 타입으로 변경하는 것을 허용하는 것이다.(JDK1.5부터 도입) 공변 반환타입으로 실제로 clone() 메서드를 사용할 때, 번거로운 형변환을 하지 않아도 된다.
 
@@ -172,9 +172,9 @@ Array의 경우도 형변환 없이 clone()으로 복사할 수 있는데, 그 �
 <br>
 <br>
 
-## 2. Object 깊은 복사
+## 2. Object 깊은 복사 (Deep copy)
 
-WIP
+위의 예제에서는 Book 객체의 field들이 다 primitive type이어서 clone()을 통한 얕은 복사로도 제대로 복사할 수 있었다. 반면에 객체의 filed에 참조형 변수가 있는 경우에는 
 
 <br>
 <br>
