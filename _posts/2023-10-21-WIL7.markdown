@@ -1,0 +1,36 @@
+---
+layout: single
+title: '[WIL7]'
+author_profile: true
+date: 2023-12-03 00:00:00 +0900
+categories: 항해
+published: true
+toc: true
+toc_label: 'Table of Contents'
+toc_icon: 'list-ul'
+toc_sticky: true
+sidebar:
+  nav: 'docs'
+# sidebar:
+#   - title: 'Title'
+#     image: http://placehold.it/350x250
+#     image_alt: 'image'
+#     text: 'Some text here.'
+#   - title: 'Another Title'
+#     text: 'More text here.'
+---
+
+WIL -03 December 2023
+
+# 팀프로젝트 회고
+
+**협업과 깊은 공부**
+
+웹미니 프로젝트 이후로 처음으로 진짜 협업같은 협헙을 경험했다. 서로의 스타일이 완전히 다른 상태에서 코드 컨벤션, 깃 컨벤션, 협업 툴을 사용하며 하나의 팀의 컨벤션을 만들고 그것을 지켜나가는 것이 생각보다 어려웠지만,팀에 규칙을 따르는 연습을 할 수 있었던 시간이었다. 취업하면 팀의 규칙을 따라야 하는데 이번 기회로 미리 연습할 수 있었던 귀중한 시간이었다.
+
+프로젝트 초기에 번아웃이 와서 조금 방황해서 집중을 잘 못한 것 같아서 조금 아쉽고, 배워야 하는 것들이 너무 많이 쏟아지는 것 같아서 조급함도 생겨서 개인적으로 힘들었다. 조급함을 갖고 공부하니까 되던 것도 안되고 새로운 것을 학습하는 것도 안된다. 빨리 취직하면 좋지만 조급한 마음을 내려놓고, 남은 기간 재밌게 개발하고 학습하자.
+
+Redis, Elastic Search, Jmeter, Docker 등등 누군가에게는 익숙한 것들이지만, 나에게는 아직 감이 안잡하는 것들을 단기간에 다 써보고 싶은 욕심에 제대로 공부하지 않고 그냥 막무가내로 써보려고 한 것 같은데, 진짜 조급함을 내려놓자. 제발.. 이 기술을 왜 써야하는지 잘 알아보고, 잘 공부해서 사용하는 것을 목표로 하자.
+
+<br>
+<br>
